@@ -1,0 +1,119 @@
+<html><body></body></html>
+
+<style>
+.block {background-color: red; border: 1px solid yellow; width: 10px; }
+div {position: absolute;}
+</style>
+
+<script>
+
+var _x = 100;
+var _y = 100; 
+var BLOCK_WIDTH = 25;
+var MAX_BLOCKS = 10; // 100
+
+var blocks = [];
+var ids = []
+    
+buildBlockArray();
+render();
+
+// linearSort();
+
+//
+// Blocks Internal
+
+function render() {
+    for(var i = 0; i < blocks.length; i++) {
+        drawBlock(blocks[i], i, blocks.length);
+    }
+}
+
+function buildBlockArray() {
+    for(var i = 0; i < MAX_BLOCKS; i++) {
+        var min = 4; var max = 500;
+        var random = Math.random();
+        var height = Math.floor(random * (min + max)) + min;
+        blocks.push(height);
+        ids.push(i);
+    }
+}
+
+function drawBlock(height, idx, count) {
+    
+    var block = document.createElement("div");      
+    
+    // assign ID
+    var id = document.createAttribute("id");   
+    id.value = idx;   
+    block.setAttributeNode(id);
+
+    // assign style
+    var css = document.createAttribute("class");   
+    css.value = "block";   
+    block.setAttributeNode(css);
+
+    // assign height 
+    block.style.height = height;
+
+    // assign width 
+    block.style.width = BLOCK_WIDTH; 
+
+    // assign X and Y positions 
+    block.style.top = _y;
+    block.style.left = (BLOCK_WIDTH + 2) * idx;
+
+    // add block
+    document.body.appendChild(block);
+
+}
+
+function linearSort() {
+    for(var i = 0; i < blocks.length; i++) {
+        for(var j = blocks.length; i > 0; i--) {
+            if(blocks[i] > blocks [j]) {
+
+                debugger;
+
+                swap(i,j,blocks);
+                animate(i,j);
+                swap(i,j,ids);
+            }
+        } 
+    }
+}
+
+
+function swap(i,j,arr) {
+    var t = arr[i];
+    arr[i] = arr[j];
+    arr[j] = t;
+}
+
+function animate(i,j) {
+    var elem1 = document.getElementById(ids[i]);
+    var elem2 = document.getElementById(ids[j]);
+
+    var position = 0;
+    var id = setInterval(frame, 10);
+    function frame() {
+        if (pos == 350) {
+            clearInterval(id);
+        }
+        else {
+            pos++;
+            var elem1Pos = elem1.style.left;
+            var elem2Pos = elem2.style.left;
+
+            elem1.style.left = elem2Pos;
+            elem2.style.left = elem1Pos;
+        }
+    }
+
+}
+
+
+</script>
+
+
+
